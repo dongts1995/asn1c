@@ -1,0 +1,95 @@
+ASC-Types
+DEFINITIONS
+AUTOMATIC TAGS ::=
+BEGIN
+
+AscUplinkCore ::= SEQUENCE {
+    metadata         Metadata,
+    data				Asc,
+    ...
+}
+
+Metadata ::= SEQUENCE {
+    asnVersion			AsnVersion,
+    createId				UInt8,
+    dataCollectionTime        	Timestamp,
+    triggerReason 			TriggerReason,
+    telematicsUnitSoftwareVersion PrintableString(SIZE(1..50)),
+    ...
+}
+
+Asc ::= SEQUENCE {
+    history       		SEQUENCE OF HistoryEvent,
+	mileage				INTEGER (0..16777214) OPTIONAL,
+	serviceDueDate			Date,
+	serviceMileageToDue         INTEGER (0..25400) OPTIONAL,
+	lastServiceDate			ShortDate,
+    lastServiceMileage         INTEGER (0..655350) OPTIONAL,
+	...
+}
+
+Date ::= SEQUENCE {
+	day			    UInt8 OPTIONAL,
+	month			UInt8 OPTIONAL,
+	year			UInt12 OPTIONAL,
+	...
+}
+
+ShortDate ::= SEQUENCE {
+    month           UInt8 OPTIONAL,
+    year            UInt12 OPTIONAL,
+    ...
+}
+
+
+HistoryEvent ::= SEQUENCE {
+	createId				UInt8,
+	uplinkCallState			UplinkCallState,
+	finalizationTime			Timestamp,
+    ...
+}
+
+
+UplinkCallState  ::= ENUMERATED {
+    noNetwork     (0),
+    successDirect    (1),
+    successRetryFirst     (2),
+	successRetrySecondOrMore (3),
+	failedPostError (4),
+	failedOther (5),
+	successAtDelayedTx (6),
+	signalInvalid (7),
+    ...
+}
+
+TriggerReason  ::= ENUMERATED {
+    chargingComplete 			(0),
+    chargingStoppedInterrupted	(1),
+    chargingStarted 			(2),
+    ecuStartup  				(3),
+    vehicleShutdown				(4),
+    mappingPerformed			(5),
+    batteryGuard 				(6),
+    debouncing					(7),
+    maxAge						(8),
+    signalInvalid 				(9),  
+    ...
+}
+
+AsnVersion ::= SEQUENCE {
+    majorVersion UInt8,
+    minorVersion UInt8
+}
+
+Timestamp ::= INTEGER(0..2147483647)
+
+
+UInt4          ::= INTEGER (0..15)
+UInt8          ::= INTEGER (0..255)
+UInt12         ::= INTEGER (0..4095)
+UInt16         ::= INTEGER (0..65535)
+UInt32         ::= INTEGER (0..4294967295)
+UInt64         ::= INTEGER (0..18446744073709551615)
+
+END
+
